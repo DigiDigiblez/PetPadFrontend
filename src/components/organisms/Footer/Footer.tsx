@@ -51,17 +51,24 @@ const Footer = () => {
                 <div>
                     <a
                         className="footer-link"
-                        href="https://github.com/MisterEmpyrean/capstone_petpad"
+                        href="https://github.com/MisterEmpyrean/PetPadFrontend"
                         target="_blank"
                         rel="noopener noreferrer">
-                        GitHub Repo
+                        GitHub FE
                     </a>
                     <a
                         className="footer-link"
-                        href="#"
+                        href="https://petpadbackend.herokuapp.com/"
                         target="_blank"
                         rel="noopener noreferrer">
                         API Docs
+                    </a>
+                    <a
+                        className="footer-link"
+                        href="https://github.com/MisterEmpyrean/PetPadBackend"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        GitHub BE
                     </a>
                 </div>
             </footer>

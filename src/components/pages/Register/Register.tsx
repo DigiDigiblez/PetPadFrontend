@@ -1,5 +1,3 @@
-import "./Register.scss";
-
 import React from "react";
 
 import Container from "../../atoms/Container";
