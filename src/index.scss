@@ -31,7 +31,6 @@ label {
   font-size: 20px;
   margin-top: 30px;
   width: 100%;
-  margin-left: 20px;
 }
 
 button {
@@ -54,7 +53,11 @@ textarea {
   height: 44px;
   margin: 10px 0;
   padding-left: 10px;
-  width: 75%;
+  width: 100%;
+}
+
+input {
+  width: 95%;
 }
 
 // Button styles
@@ -82,7 +85,7 @@ textarea {
   margin: 10px 0;
   padding: 10px;
   text-transform: uppercase;
-  width: 91%;
+  width: 100%;
 }
 
 .link_cta {

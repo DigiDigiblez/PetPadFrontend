@@ -59,6 +59,7 @@
 
   label {
     margin-top: 15px;
+    margin-left: 20px;
   }
 
   form {
@@ -76,5 +77,11 @@
   select {
     width: 95%;
     height: 48px;
+  }
+}
+
+.chrome {
+  &__content {
+    margin: 0;
   }
 }
