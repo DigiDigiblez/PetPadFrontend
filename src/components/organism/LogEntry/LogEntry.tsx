@@ -3,6 +3,13 @@ import "./LogEntry.scss";
 import React, {useEffect, useState} from "react";
 import Container from "../../atoms/Container";
 
+import {ReactComponent as ExcitedMood} from "../../../icons/mood_1_excited.svg";
+import {ReactComponent as HappyMood} from "../../../icons/mood_2_happy.svg";
+import {ReactComponent as OkayMood} from "../../../icons/mood_3_okay.svg";
+import {ReactComponent as SadMood} from "../../../icons/mood_4_sad.svg";
+import {ReactComponent as AngryMood} from "../../../icons/mood_5_angry.svg";
+import {ReactComponent as ExhaustedMood} from "../../../icons/mood_6_exhausted.svg";
+
 import {ReactComponent as HistoryAttachment} from "../../../icons/history_attachment.svg";
 import {ReactComponent as HistoryEdit} from "../../../icons/history_edit.svg";
 import {ReactComponent as HistoryDelete} from "../../../icons/history_delete.svg";
@@ -90,6 +97,8 @@ const LogEntry = ({
             });
     }, [])
 
+    const Moood: any = selectMoodToShow(mood);
+
     return (
         <Container className={`${baseclass}__log`}>
             <h3>
@@ -99,7 +108,8 @@ const LogEntry = ({
                 <div className={`${baseclass}__log_entry_header`}>
                     <div
                         className={`${baseclass}__log_entry_header_1`}>
-                        <h4>Created: {time}</h4>
+                        {/* If timestamps don't match, post has been modified since creation. */}
+                        <h4>{dateCreated !== dateLastModified ? "Modified: " : "Created: "} {time}</h4>
                         <HistoryAttachment
                             onClick={() => alert("Attachments feature coming soon. Icon for proof of concept.")}/>
                         {postedOnBirthday && <Birthday
@@ -115,10 +125,44 @@ const LogEntry = ({
                 </div>
                 <div className={`${baseclass}__log_entry_body`}>
                     <span>{children}</span>
+                    <Moood className="post-mood" />
                 </div>
             </Container>
         </Container>
     );
 };
+
+const selectMoodToShow = (mood: any) => {
+    let moodSVG = null;
+
+    switch (mood) {
+        case "Excited": {
+            moodSVG = ExcitedMood;
+            break;
+        }
+        case "Happy": {
+            moodSVG = HappyMood;
+            break;
+        }
+        case "Okay": {
+            moodSVG = OkayMood;
+            break;
+        }
+        case "Sad": {
+            moodSVG = SadMood;
+            break;
+        }
+        case "Angry": {
+            moodSVG = AngryMood;
+            break;
+        }
+        case "Exhausted": {
+            moodSVG = ExhaustedMood;
+            break;
+        }
+    }
+
+    return moodSVG;
+}
 
 export default LogEntry;

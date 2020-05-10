@@ -13,9 +13,12 @@ import Container from "../../atoms/Container";
 import Chrome from "../Chrome/Chrome";
 import axios from "axios";
 import {ENDPOINT} from "../../../helpers/urls";
+import {useHistory} from "react-router";
 
 const Pad = (props: any) => {
     const baseclass = "pad";
+
+    const history = useHistory();
 
     const [profileData, setProfileData] = useState({
         name: undefined,
@@ -32,9 +35,6 @@ const Pad = (props: any) => {
         editingPostMood = props.location.state.mood;
         editingPostContent = props.location.state.children;
     }
-
-    console.log(editingPostMood)
-    console.log(editingPostContent)
 
     const [nameAlternative, setNameAlternative] = useState("they");
 
@@ -57,6 +57,22 @@ const Pad = (props: any) => {
 
         // Default content (post edit mode only)
         if (editingPostContent) {
+            // Select existing mood
+            const moods = document.getElementsByClassName("mood");
+
+            Array.from(moods).forEach((mood: any) => {
+                const name = mood.getAttribute("name")
+                activeMood.moodLabel = editingPostMood;
+
+                console.log(name, editingPostMood)
+
+                if (name === editingPostMood) {
+                    console.log(name, editingPostMood)
+                    mood.style.border = "solid 5px green";
+                }
+            });
+
+            // Populate with existing content
             const contentEditableDiv = document.querySelector(`.${baseclass}__note-content`);
             contentEditableDiv!.innerHTML = editingPostContent;
         }
@@ -69,6 +85,12 @@ const Pad = (props: any) => {
     const [currentContent, setCurrentContent] = useState(editingPostMood || "")
 
     const selectMood = (e: any) => {
+        const moods = document.getElementsByClassName("mood");
+        // Reset transparencies.
+        Array.from(moods).forEach((mood: any) => {
+            mood.style.border = "solid 5px transparent";
+        });
+
         activeMood.moodLabel = e.currentTarget.getAttribute("name");
 
         if (activeMood.moodTarget) {
@@ -87,13 +109,21 @@ const Pad = (props: any) => {
 
         // Is editing an existing post
         if (editingPostContent) {
+            if (!activeMood.moodLabel) {
+                return alert("Please select a mood before republishing.")
+            }
+            else if (currentContent == "") {
+                return alert("Please provide content before republishing.")
+            }
+
             axios.patch(`${ENDPOINT.POSTS.PATCH_SPECIFIC}${editingPostId}`, {
-                mood: editingPostMood || "",
-                content: editingPostContent || "",
+                mood: activeMood.moodLabel || "",
+                content: currentContent || "",
                 date_last_modified: new Date(),
             })
                 .then(result => {
                     window.scrollTo(0, 0);
+                    history.push("/history")
 
                     console.log("Success: ", result);
                 })
@@ -105,6 +135,13 @@ const Pad = (props: any) => {
         }
         // Is publishing a new post
         else {
+            if (!activeMood.moodLabel) {
+                return alert("Please select a mood before publishing.")
+            }
+            else if (currentContent == "") {
+                return alert("Please provide content before publishing.")
+            }
+
             axios.post(ENDPOINT.POSTS.POST, {
                 mood: activeMood.moodLabel || "",
                 content: currentContent || "",
@@ -152,6 +189,7 @@ const Pad = (props: any) => {
                             <div
                                 className={`${baseclass}__moods_mood`}>
                                 <ExcitedMood
+                                    className={"mood"}
                                     onClick={selectMood}
                                     name="Excited"
                                 />
@@ -160,6 +198,7 @@ const Pad = (props: any) => {
                             <div
                                 className={`${baseclass}__moods_mood`}>
                                 <HappyMood
+                                    className={"mood"}
                                     onClick={selectMood}
                                     name="Happy"
                                 />
@@ -168,6 +207,7 @@ const Pad = (props: any) => {
                             <div
                                 className={`${baseclass}__moods_mood`}>
                                 <OkayMood
+                                    className={"mood"}
                                     onClick={selectMood}
                                     name="Okay"
                                 />
@@ -176,6 +216,7 @@ const Pad = (props: any) => {
                             <div
                                 className={`${baseclass}__moods_mood`}>
                                 <SadMood
+                                    className={"mood"}
                                     onClick={selectMood}
                                     name="Sad"
                                 />
@@ -184,6 +225,7 @@ const Pad = (props: any) => {
                             <div
                                 className={`${baseclass}__moods_mood`}>
                                 <AngryMood
+                                    className={"mood"}
                                     onClick={selectMood}
                                     name="Angry"
                                 />
@@ -192,6 +234,7 @@ const Pad = (props: any) => {
                             <div
                                 className={`${baseclass}__moods_mood`}>
                                 <ExhaustedMood
+                                    className={"mood"}
                                     onClick={selectMood}
                                     name="Exhausted"
                                 />

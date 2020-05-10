@@ -264,32 +264,32 @@ const Profile = () => {
                             <input
                                 name="name"
                                 type="text"
+                                pattern="[A-Za-z ]*"
                                 placeholder={`${petName}'s name`}
                                 defaultValue={profileData.name}
                                 id="form-name"
+                                required
                             />
 
                             <label htmlFor="species">
                                 <small>Species</small>
                             </label>
-                            <input
-                                name="species"
-                                type="text"
-                                placeholder={`${petName}'s species`}
-                                defaultValue={profileData.species}
-                                id="form-species"
-                            />
+                            <select name="species" id="form-species" required>
+                                <option disabled>
+                                    {petName}'s species
+                                </option>
+                                <option value="Dog" selected>Dog</option>
+                            </select>
 
                             <label htmlFor="breed">
-                                <small>Breed</small>
+                                <small>Species</small>
                             </label>
-                            <input
-                                name="breed"
-                                type="text"
-                                placeholder={`${petName}'s breed`}
-                                defaultValue={profileData.breed}
-                                id="form-breed"
-                            />
+                            <select name="breed" id="form-breed" required>
+                                <option disabled>
+                                    {petName}'s breed
+                                </option>
+                                <option value="Border Collie" selected>Border Collie</option>
+                            </select>
 
                             <label htmlFor="birthday">
                                 <small>Birthday</small>
@@ -299,6 +299,7 @@ const Profile = () => {
                                 type="text"
                                 defaultValue={birthdayField}
                                 id="form-birthday"
+                                required
                             />
 
                             <label htmlFor="favouriteToy">
@@ -307,9 +308,11 @@ const Profile = () => {
                             <input
                                 name="favouriteToy"
                                 type="text"
+                                pattern="[A-Za-z ]*"
                                 placeholder={`${petName}'s favourite toy`}
                                 defaultValue={profileData.favourite_toy}
                                 id="form-favourite-toy"
+                                required
                             />
 
                             <label htmlFor="favouriteFood">
@@ -318,15 +321,17 @@ const Profile = () => {
                             <input
                                 name="favouriteFood"
                                 type="text"
+                                pattern="[A-Za-z ]*"
                                 placeholder={`${petName}'s favourite food`}
                                 defaultValue={profileData.favourite_food}
                                 id="form-favourite-food"
+                                required
                             />
 
                             <label htmlFor="personalityTrait">
                                 <small>Personality trait</small>
                             </label>
-                            <select name="personalityTrait" id="form-gender">
+                            <select name="personalityTrait" id="form-gender" required>
                                 <option disabled>
                                     {petName}'s personality trait
                                 </option>
@@ -340,9 +345,11 @@ const Profile = () => {
                             <input
                                 name="weight"
                                 type="text"
+                                pattern="[1-9.]*"
                                 placeholder={`${petName}'s weight (in kg)`}
                                 defaultValue={profileData.weight}
                                 id="form-weight"
+                                required
                             />
 
                             <label htmlFor="height">
@@ -351,9 +358,11 @@ const Profile = () => {
                             <input
                                 name="height"
                                 type="text"
+                                pattern="[1-9.]*"
                                 placeholder={`${petName}'s weight (in cm)`}
                                 defaultValue={profileData.height}
                                 id="form-height"
+                                required
                             />
 
                             <button

@@ -56,7 +56,11 @@ const RegisterStageThree = () => {
             });
         } else {
             etaForBuild.seconds = 3;
-            localStorage.setItem("currentStep", "1")
+
+            // Garbage collection
+            localStorage.removeItem("currentStep")
+            localStorage.removeItem("petRegistrationData")
+
             history.push("/profile");
         }
     }, 1000);

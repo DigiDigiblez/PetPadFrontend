@@ -46,7 +46,7 @@ const RegisterStageOne = () => {
                         What is their{" "}
                         <span className="emphasis">gender</span>?
                     </label>
-                    <select name="gender" id="form-gender">
+                    <select name="gender" id="form-gender" required>
                         <option disabled selected>
                             My pet is a
                         </option>
@@ -63,8 +63,10 @@ const RegisterStageOne = () => {
                     <input
                         name="name"
                         type="text"
+                        pattern="[A-Za-z ]*"
                         placeholder="My pet is called"
                         id="form-name"
+                        required
                     />
                 </div>
 

@@ -19,6 +19,7 @@
       width: 300px;
       max-height: 300px;
       overflow: auto;
+      position: relative;
 
       &_header {
         &_1 {
@@ -40,6 +41,13 @@
       &_body {
         margin: 10px 25px 25px;
         overflow-wrap: break-word;
+
+        & .post-mood {
+          position: absolute;
+          bottom: -15px;
+          right: -15px;
+          transform: scale(.5);
+        }
       }
     }
   }

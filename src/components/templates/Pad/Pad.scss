@@ -43,6 +43,13 @@
     text-align: left;
     max-height: 300px;
     overflow: auto;
+
+    &-content{
+      overflow: auto;
+      height: 100%;
+      position: absolute;
+      width: 100%;
+    }
   }
 
   &__attachments {

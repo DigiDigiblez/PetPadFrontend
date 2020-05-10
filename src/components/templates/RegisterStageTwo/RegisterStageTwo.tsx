@@ -47,7 +47,7 @@ const RegisterStageTwo = () => {
                         Who is{" "}
                         <span className="emphasis">{petName}</span>?
                     </label>
-                    <select name="species" id="form-species">
+                    <select name="species" id="form-species" required>
                         <option disabled selected>
                             {petName} is a
                         </option>
@@ -60,7 +60,7 @@ const RegisterStageTwo = () => {
                         What is {petName}'s{" "}
                         <span className="emphasis">breed</span>?
                     </label>
-                    <select name="breed" id="form-breed">
+                    <select name="breed" id="form-breed" required>
                         <option disabled selected>
                             {petName}'s breed is a
                         </option>
@@ -78,8 +78,10 @@ const RegisterStageTwo = () => {
                     <input
                         name="weight"
                         type="text"
+                        pattern="[1-9.]*"
                         placeholder={`${petName}'s weight is`}
                         id="form-weight"
+                        required
                     />
                 </div>
 
@@ -91,8 +93,10 @@ const RegisterStageTwo = () => {
                     <input
                         name="height"
                         type="text"
+                        pattern="[1-9.]*"
                         placeholder={`${petName}'s height is`}
                         id="form-height"
+                        required
                     />
                 </div>
 
