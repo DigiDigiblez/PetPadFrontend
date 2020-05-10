@@ -1,7 +1,7 @@
 import "./MainDrawerContent.scss";
 
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import {NavLink, useHistory} from "react-router-dom";
 import Container from "../../atoms/Container";
 import DrawerNavItem from "../../atoms/DrawerNavItem/DrawerNavItem";
 import { ROUTES } from "../../pages/Routes/types";
@@ -14,9 +14,12 @@ import {ENDPOINT} from "../../../helpers/urls";
 
 const MainDrawerContent = () => {
     const baseclass = "main-drawer-content";
+
+    const history = useHistory();
+
     const [auth, setAuth] = useState(false);
     const isAuthed = true; // TODO
-    const isPremium = false; // TODO
+    const isPremium = true; // TODO
 
     const [profileData, setProfileData] = useState({
         name: "",
@@ -38,6 +41,14 @@ const MainDrawerContent = () => {
     }, [])
 
     const petName = profileData.name ? profileData.name : "Pet";
+
+    const checkIfPremium = (isPremium: boolean) => {
+    if (!isPremium) {
+        return alert("You are on a FREE TIER account. Please upgrade to PREMIUM to use this feature.")
+    }
+
+    history.push("/assistant");
+}
 
     useEffect(() => {
         // TODO - Axios request post-auth BE setup to toggle based on authed user
@@ -80,9 +91,8 @@ const MainDrawerContent = () => {
                             alt={`Navigate to ${petName}'s history`}
                             text={`${petName}'s history`}
                         />
-                        <span onClick={checkIfPremium}>
+                        <span onClick={() => checkIfPremium(isPremium)}>
                             <DrawerNavItem
-                            to={isPremium ? "/assistant" : ""}
                             badge={NavigateAssistant}
                             alt={`Navigate to ${petName}'s assistant`}
                             text={`${petName}'s assistant`}
@@ -118,9 +128,5 @@ const MainDrawerContent = () => {
         </Container>
     );
 };
-
-const checkIfPremium = () => {
-    alert("You are on a FREE TIER account. Please upgrade to PREMIUM to use this feature.")
-}
 
 export default MainDrawerContent;

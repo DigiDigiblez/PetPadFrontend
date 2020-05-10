@@ -1,8 +1,10 @@
 .assistant {
+
   &__advice {
     border: solid 1px #999999;
     min-height: 220px;
     padding: 20px;
+    border-radius: 5px;
 
     &_intro,
     &_tip {
@@ -14,7 +16,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    margin: 40px;
+    margin: 0;
   }
 
   input,

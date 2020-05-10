@@ -73,13 +73,25 @@ const LogEntry = ({
             return alert("You are on a FREE TIER account. Only PREMIUM users can delete posts.")
         }
 
-        axios.delete(`${ENDPOINT.POSTS.DELETE_SPECIFIC}${id}`)
+        const well = document.querySelector(".save-successful-well")!;
+        const submitBtn = document.getElementById(
+            "save-profile-data-btn",
+        )! as HTMLInputElement;
+
+        well.classList.toggle("hidden");
+
+        setTimeout(() => {
+            axios.delete(`${ENDPOINT.POSTS.DELETE_SPECIFIC}${id}`)
             .then(result => {
+                well.classList.toggle("hidden");
+                window.location.reload()
+
                 console.log("Success: ", result);
             })
             .catch(error => {
                 console.log("Error: ", error);
             });
+        }, 500);
     }
 
     useEffect(() => {
@@ -125,9 +137,13 @@ const LogEntry = ({
                 </div>
                 <div className={`${baseclass}__log_entry_body`}>
                     <span>{children}</span>
-                    <Moood className="post-mood" />
+                    <Moood className="post-mood"/>
                 </div>
             </Container>
+            <div
+                className={`well save-successful-well hidden`}>
+                Post deleted successfully!
+            </div>
         </Container>
     );
 };
