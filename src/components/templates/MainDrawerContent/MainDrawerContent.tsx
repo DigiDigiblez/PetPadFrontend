@@ -15,7 +15,8 @@ import {ENDPOINT} from "../../../helpers/urls";
 const MainDrawerContent = () => {
     const baseclass = "main-drawer-content";
     const [auth, setAuth] = useState(false);
-    const isAuthed = true;
+    const isAuthed = true; // TODO
+    const isPremium = false; // TODO
 
     const [profileData, setProfileData] = useState({
         name: "",
@@ -79,12 +80,15 @@ const MainDrawerContent = () => {
                             alt={`Navigate to ${petName}'s history`}
                             text={`${petName}'s history`}
                         />
-                        <DrawerNavItem
-                            to="/assistant"
+                        <span onClick={checkIfPremium}>
+                            <DrawerNavItem
+                            to={isPremium ? "/assistant" : ""}
                             badge={NavigateAssistant}
                             alt={`Navigate to ${petName}'s assistant`}
                             text={`${petName}'s assistant`}
+                            premium
                         />
+                        </span>
                     </div>
                 </Container>
             ) : (
@@ -114,5 +118,9 @@ const MainDrawerContent = () => {
         </Container>
     );
 };
+
+const checkIfPremium = () => {
+    alert("You are on a FREE TIER account. Please upgrade to PREMIUM to use this feature.")
+}
 
 export default MainDrawerContent;

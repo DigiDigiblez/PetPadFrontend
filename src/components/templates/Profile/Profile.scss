@@ -1,5 +1,11 @@
 .profile {
 
+  .chrome {
+    &__content {
+      margin: 0;
+    }
+  }
+
   #upload-image {
     display: none;
   }
@@ -77,11 +83,5 @@
   select {
     width: 95%;
     height: 48px;
-  }
-}
-
-.chrome {
-  &__content {
-    margin: 0;
   }
 }

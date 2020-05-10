@@ -11,6 +11,7 @@ const History = () => {
     const baseclass = "history";
 
     interface IPostData {
+        id: number;
         mood: string;
         content: string;
         creation_datetime: Date;
@@ -61,6 +62,8 @@ const History = () => {
                     {postData.posts.length > 0 ?
                         postData.posts.map((post: IPostData) => (
                             <LogEntry
+                                id={post.id}
+                                mood={post.mood}
                                 dateCreated={post.creation_datetime}
                                 dateLastModified={post.date_last_modified}
                                 petBirthday={profileData.birthday}>

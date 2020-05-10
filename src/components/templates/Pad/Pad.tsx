@@ -14,13 +14,29 @@ import Chrome from "../Chrome/Chrome";
 import axios from "axios";
 import {ENDPOINT} from "../../../helpers/urls";
 
-const Pad = () => {
+const Pad = (props: any) => {
     const baseclass = "pad";
 
     const [profileData, setProfileData] = useState({
         name: undefined,
         gender: undefined,
     })
+
+    // Collect any post data if the user is accessing this page to edit a post.
+    let editingPostId: any;
+    let editingPostMood: any;
+    let editingPostContent: any;
+
+    if (props.location.state) {
+        editingPostId = props.location.state.id;
+        editingPostMood = props.location.state.mood;
+        editingPostContent = props.location.state.children;
+    }
+
+    console.log(editingPostMood)
+    console.log(editingPostContent)
+
+    const [nameAlternative, setNameAlternative] = useState("they");
 
     useEffect(() => {
         axios.get(ENDPOINT.PETS.GET_FIRST)
@@ -30,18 +46,27 @@ const Pad = () => {
                     ...result.data,
                 })
 
+                if (result.data.gender === "Male") setNameAlternative("he");
+                else if (result.data.gender === "Female") setNameAlternative("she");
+
                 console.log("Success: ", result);
             })
             .catch(error => {
                 console.log("Error: ", error);
             });
+
+        // Default content (post edit mode only)
+        if (editingPostContent) {
+            const contentEditableDiv = document.querySelector(`.${baseclass}__note-content`);
+            contentEditableDiv!.innerHTML = editingPostContent;
+        }
     }, [])
 
     const [activeMood, setActiveMood] = useState({
         moodTarget: null,
         moodLabel: "",
     });
-    const [currentContent, setCurrentContent] = useState("")
+    const [currentContent, setCurrentContent] = useState(editingPostMood || "")
 
     const selectMood = (e: any) => {
         activeMood.moodLabel = e.currentTarget.getAttribute("name");
@@ -55,32 +80,49 @@ const Pad = () => {
             "solid 5px green";
     };
 
-    let pronoun;
-    if (profileData.gender === "male") pronoun = "he";
-    else if (profileData.gender === "female") pronoun = "she";
-
     const petName = profileData.name || "Pet";
 
     const handlePublishPost = (e: any) => {
         e.preventDefault();
 
-        axios.post(ENDPOINT.POSTS.POST, {
-            mood: activeMood.moodLabel || "",
-            content: currentContent || "",
-            creation_datetime: new Date(),
-            date_last_modified: new Date(),
-            is_open: false,
-        })
-            .then(result => {
-                window.scrollTo(0, 0);
-
-                console.log("Success: ", result);
+        // Is editing an existing post
+        if (editingPostContent) {
+            axios.patch(`${ENDPOINT.POSTS.PATCH_SPECIFIC}${editingPostId}`, {
+                mood: editingPostMood || "",
+                content: editingPostContent || "",
+                date_last_modified: new Date(),
             })
-            .catch(error => {
-                window.scrollTo(0, 0);
+                .then(result => {
+                    window.scrollTo(0, 0);
 
-                console.log("Error: ", error);
-            });
+                    console.log("Success: ", result);
+                })
+                .catch(error => {
+                    window.scrollTo(0, 0);
+
+                    console.log("Error: ", error);
+                });
+        }
+        // Is publishing a new post
+        else {
+            axios.post(ENDPOINT.POSTS.POST, {
+                mood: activeMood.moodLabel || "",
+                content: currentContent || "",
+                creation_datetime: new Date(),
+                date_last_modified: new Date(),
+                is_open: false,
+            })
+                .then(result => {
+                    window.scrollTo(0, 0);
+
+                    console.log("Success: ", result);
+                })
+                .catch(error => {
+                    window.scrollTo(0, 0);
+
+                    console.log("Error: ", error);
+                });
+        }
 
         const well = document.querySelector(".save-successful-well")!;
         const submitBtn = document.getElementById(
@@ -158,10 +200,13 @@ const Pad = () => {
                         </span>
                     </Container>
 
-                    <h3>What did {pronoun || "they"} do today?</h3>
+                    <h3>What did {nameAlternative} do today?</h3>
                     <div className={`${baseclass}__note`}>
-                        <div className={`${baseclass}__note-content`} aria-required contentEditable
-                             onInput={e => setCurrentContent(e.currentTarget.textContent!)}
+                        <div
+                            className={`${baseclass}__note-content`}
+                            aria-required
+                            contentEditable
+                            onInput={e => setCurrentContent(e.currentTarget.textContent!)}
                         />
                     </div>
                     <span
@@ -174,7 +219,7 @@ const Pad = () => {
                     </span>
 
                     <button onClick={handlePublishPost} className="secondary_cta" id="publish-entry-btn">
-                        Publish post
+                        {editingPostContent ? "Republish" : "Publish"} post
                     </button>
 
                     <div

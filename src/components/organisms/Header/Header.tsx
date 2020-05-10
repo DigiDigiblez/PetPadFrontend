@@ -40,7 +40,7 @@ const Header = () => {
             <Container className={`${baseclass}__logo`}>
                 <Logo className={`${baseclass}__logo_image`} />
                 <h2 className={`${baseclass}__logo_name`}>
-                    {profileData.name ? `${profileData.name}'s Pad` : "Pet Pad"}
+                    {profileData.name ? `${profileData.name}` : "Pet Pad"}
                 </h2>
             </Container>
             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}

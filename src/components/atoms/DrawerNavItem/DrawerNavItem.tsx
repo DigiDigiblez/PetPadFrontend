@@ -1,16 +1,17 @@
 import "./DrawerNavItem.scss";
 
-import React, { useEffect, useState } from "react";
-import { IDrawerNavItemProps } from "./types";
-import { NavLink } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {IDrawerNavItemProps} from "./types";
+import {NavLink} from "react-router-dom";
 import useStateWithCallback from "../../../helpers/hooks/useStateWithCallback";
 
 const DrawerNavItem = ({
-    to,
-    alt,
-    badge,
-    text,
-}: IDrawerNavItemProps) => {
+                           to,
+                           alt,
+                           badge,
+                           text,
+                           premium,
+                       }: IDrawerNavItemProps) => {
     const baseclass = "drawer-nav-item";
 
     return (
@@ -24,7 +25,10 @@ const DrawerNavItem = ({
                     height="30px"
                 />
             )}
-            <span>{text}</span>
+            <div>
+                {premium && <small className="premium">Premium users only</small>}
+                <span>{text}</span>
+            </div>
         </NavLink>
     );
 };
