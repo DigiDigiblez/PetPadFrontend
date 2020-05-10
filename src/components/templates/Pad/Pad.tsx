@@ -63,13 +63,12 @@ const Pad = () => {
 
     const handlePublishPost = (e: any) => {
         e.preventDefault();
-        const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
 
         axios.post(ENDPOINT.POSTS.POST, {
             mood: activeMood.moodLabel || "",
             content: currentContent || "",
-            creation_datetime: yesterday,
-            date_last_modified: yesterday,
+            creation_datetime: new Date(),
+            date_last_modified: new Date(),
             is_open: false,
         })
             .then(result => {

@@ -30,11 +30,17 @@ label {
   display: block;
   font-size: 20px;
   margin-top: 30px;
+  width: 100%;
+  margin-left: 20px;
 }
 
 button {
   cursor: pointer;
   height: 44px;
+}
+
+small {
+  text-align: left;
 }
 
 input,

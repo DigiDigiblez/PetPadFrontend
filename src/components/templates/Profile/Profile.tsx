@@ -163,7 +163,20 @@ const Profile = () => {
 
     const encodeImageFileAsURL = (files: any): void => {
         if (files && files[0]) {
+            // Prevent user uploading non-images, or images exceeding 2MB
+            const fileSizeInMegabytes = files[0].size / 1024 / 1024;
+            const fileIsAnImage = files[0].type.includes("image");
+
+            if (fileSizeInMegabytes >= 2) {
+                return alert("File size exceeds 2 MB")
+            }
+
+            if (!fileIsAnImage) {
+                return alert("Only image file types are supported.")
+            }
+
             const reader = new FileReader();
+
             reader.onloadend = () => {
                 axios.patch(ENDPOINT.PETS.PATCH_FIRST, {
                     profile_image: reader.result || "",
@@ -187,8 +200,8 @@ const Profile = () => {
                     .catch(error => {
                         console.log("Error: ", error);
                     });
-
             };
+
             reader.readAsDataURL(files[0]);
         }
     };
@@ -245,6 +258,9 @@ const Profile = () => {
                             )}
                         </span>
                         <form onSubmit={handleSubmit}>
+                            <label htmlFor="name">
+                                <small>Name</small>
+                            </label>
                             <input
                                 name="name"
                                 type="text"
@@ -253,6 +269,9 @@ const Profile = () => {
                                 id="form-name"
                             />
 
+                            <label htmlFor="species">
+                                <small>Species</small>
+                            </label>
                             <input
                                 name="species"
                                 type="text"
@@ -261,6 +280,9 @@ const Profile = () => {
                                 id="form-species"
                             />
 
+                            <label htmlFor="breed">
+                                <small>Breed</small>
+                            </label>
                             <input
                                 name="breed"
                                 type="text"
@@ -269,13 +291,19 @@ const Profile = () => {
                                 id="form-breed"
                             />
 
+                            <label htmlFor="birthday">
+                                <small>Birthday</small>
+                            </label>
                             <input
                                 name="birthday"
-                                type="date"
+                                type="text"
                                 defaultValue={birthdayField}
                                 id="form-birthday"
                             />
 
+                            <label htmlFor="favouriteToy">
+                                <small>Favourite toy</small>
+                            </label>
                             <input
                                 name="favouriteToy"
                                 type="text"
@@ -284,6 +312,9 @@ const Profile = () => {
                                 id="form-favourite-toy"
                             />
 
+                            <label htmlFor="favouriteFood">
+                                <small>Favourite food</small>
+                            </label>
                             <input
                                 name="favouriteFood"
                                 type="text"
@@ -292,14 +323,20 @@ const Profile = () => {
                                 id="form-favourite-food"
                             />
 
-                            <input
-                                name="personalityTrait"
-                                type="text"
-                                placeholder={`${petName}'s personality trait`}
-                                defaultValue={profileData.personality_trait}
-                                id="form-personality-trait"
-                            />
+                            <label htmlFor="personalityTrait">
+                                <small>Personality trait</small>
+                            </label>
+                            <select name="personalityTrait" id="form-gender">
+                                <option disabled>
+                                    {petName}'s personality trait
+                                </option>
+                                <option value="Playful" selected>Playful</option>
+                            </select>
 
+
+                            <label htmlFor="weight">
+                                <small>Weight (in kg)</small>
+                            </label>
                             <input
                                 name="weight"
                                 type="text"
@@ -308,10 +345,13 @@ const Profile = () => {
                                 id="form-weight"
                             />
 
+                            <label htmlFor="height">
+                                <small>Height (in cm)</small>
+                            </label>
                             <input
                                 name="height"
                                 type="text"
-                                placeholder={`${petName}'s height (in cm)`}
+                                placeholder={`${petName}'s weight (in cm)`}
                                 defaultValue={profileData.height}
                                 id="form-height"
                             />

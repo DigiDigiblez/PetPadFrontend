@@ -57,6 +57,10 @@
     }
   }
 
+  label {
+    margin-top: 15px;
+  }
+
   form {
     align-items: center;
     display: flex;
@@ -65,8 +69,12 @@
   }
 
   input,
-  select,
   textarea {
     width: 90%;
+  }
+
+  select {
+    width: 95%;
+    height: 48px;
   }
 }
