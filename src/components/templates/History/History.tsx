@@ -23,7 +23,7 @@ const History = () => {
         total_posts: number;
     }
 
-    const [profileData, setProfileData] = useState({name: "Pet"})
+    const [profileData, setProfileData] = useState({name: "Pet", birthday: new Date()})
     const [postData, setPostData] = useState({posts: [], total_posts: 0} as IPostList)
 
     useEffect(() => {
@@ -62,11 +62,12 @@ const History = () => {
                         postData.posts.map((post: IPostData) => (
                             <LogEntry
                                 dateCreated={post.creation_datetime}
-                                dateLastModified={post.date_last_modified}>
+                                dateLastModified={post.date_last_modified}
+                                petBirthday={profileData.birthday}>
                                 {post.content}
                             </LogEntry>
                         )) : "No posts to display"
-                    }}
+                    }
                 </Container>
             </Chrome>
         </Container>

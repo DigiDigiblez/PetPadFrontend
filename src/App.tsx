@@ -10,30 +10,6 @@ if (!localStorage.getItem("currentStep")) {
     localStorage.setItem("currentStep", "1");
 }
 
-if (!localStorage.getItem("petRegistrationData")) {
-    localStorage.setItem(
-        "petRegistrationData",
-        JSON.stringify({
-            name: "",
-            gender: "",
-            species: "",
-            breed: "",
-            birthday: null,
-            favouriteToy: "",
-            favouriteFood: "",
-            personalityTrait: "",
-            weight: 0,
-            height: 0,
-            socialGoogle: "",
-            socialFacebook: "",
-            socialTwitter: "",
-            socialInstagram: "",
-            completedProfile: false,
-            profileImage: null,
-        }),
-    );
-}
-
 const App = () => {
     const baseclass = "app";
 

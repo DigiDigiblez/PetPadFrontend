@@ -76,13 +76,13 @@ const Profile = () => {
             name: name ? name.value : profileData.name,
             species: species ? species.value : profileData.species,
             breed: breed ? breed.value : profileData.breed,
-            favouriteToy: favouriteToy
+            favourite_toy: favouriteToy
                 ? favouriteToy.value
                 : profileData.favourite_toy,
-            favouriteFood: favouriteFood
+            favourite_food: favouriteFood
                 ? favouriteFood.value
                 : profileData.favourite_food,
-            personalityTrait: personalityTrait
+            personality_trait: personalityTrait
                 ? personalityTrait.value
                 : profileData.personality_trait,
             weight: weight ? weight.value : profileData.weight,
@@ -107,8 +107,10 @@ const Profile = () => {
             well.classList.toggle("hidden");
             submitBtn.disabled = false;
             submitBtn.style.cursor = "pointer";
-            window.location.reload()
+            // window.location.reload()
         }, 500);
+
+        console.log(e.target)
 
         axios.patch(ENDPOINT.PETS.PATCH_FIRST, {
             name: completedPetData.name || "",
@@ -116,9 +118,9 @@ const Profile = () => {
             breed: completedPetData.breed || "",
             weight: completedPetData.weight || 0,
             height: completedPetData.height || 0,
-            favourite_toy: completedPetData.favouriteToy || "",
-            favourite_food: completedPetData.favouriteFood || "",
-            personality_trait: completedPetData.personalityTrait || "",
+            favourite_toy: completedPetData.favourite_toy || "",
+            favourite_food: completedPetData.favourite_food || "",
+            personality_trait: completedPetData.personality_trait || "",
             profile_completed: isComplete || false,
         })
             .then(result => {
@@ -129,15 +131,21 @@ const Profile = () => {
                             ...result.data,
                         })
 
+                        window.scrollTo(0, 0);
+
                         console.log("Success: ", result);
                     })
                     .catch(error => {
+                        window.scrollTo(0, 0);
+
                         console.log("Error: ", error);
                     });
 
                 console.log("Success: ", result);
             })
             .catch(error => {
+                window.scrollTo(0, 0);
+
                 console.log("Error: ", error);
             });
     };
@@ -191,14 +199,14 @@ const Profile = () => {
                 <Container className={`${baseclass}__content`}>
                     <h2>{petName || "Pet"}'s Profile</h2>
                     <Container className={`${baseclass}__pet_avatar`}>
-                        <img
+                        {profileData.profile_image && <img
                             onClick={handleFileUploader}
                             // @ts-ignore
                             src={profileData.profile_image}
                             alt={`${petName}`}
                             id="profile-image"
-                        />
-                        {petProfileImage ===
+                        />}
+                        {profileData.profile_image ===
                         PlaceholderProfileImage && (
                             <span className="change-image">
                                 Upload image
@@ -262,7 +270,7 @@ const Profile = () => {
                             />
 
                             <input
-                                name="breed"
+                                name="birthday"
                                 type="date"
                                 defaultValue={birthdayField}
                                 id="form-birthday"

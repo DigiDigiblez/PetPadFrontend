@@ -17,9 +17,25 @@ import {ENDPOINT} from "../../../helpers/urls";
 const Pad = () => {
     const baseclass = "pad";
 
-    const {name, gender} = JSON.parse(
-        localStorage.getItem("petRegistrationData")!,
-    );
+    const [profileData, setProfileData] = useState({
+        name: undefined,
+        gender: undefined,
+    })
+
+    useEffect(() => {
+        axios.get(ENDPOINT.PETS.GET_FIRST)
+            .then(result => {
+                setProfileData({
+                    ...profileData,
+                    ...result.data,
+                })
+
+                console.log("Success: ", result);
+            })
+            .catch(error => {
+                console.log("Error: ", error);
+            });
+    }, [])
 
     const [activeMood, setActiveMood] = useState({
         moodTarget: null,
@@ -39,26 +55,31 @@ const Pad = () => {
             "solid 5px green";
     };
 
-    const petName = name ? name : "Pet";
-
     let pronoun;
-    if (gender === "male") pronoun = "he";
-    else if (gender === "female") pronoun = "she";
+    if (profileData.gender === "male") pronoun = "he";
+    else if (profileData.gender === "female") pronoun = "she";
+
+    const petName = profileData.name || "Pet";
 
     const handlePublishPost = (e: any) => {
         e.preventDefault();
+        const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
 
         axios.post(ENDPOINT.POSTS.POST, {
             mood: activeMood.moodLabel || "",
             content: currentContent || "",
-            creation_datetime: new Date(),
-            date_last_modified: new Date(),
+            creation_datetime: yesterday,
+            date_last_modified: yesterday,
             is_open: false,
         })
             .then(result => {
+                window.scrollTo(0, 0);
+
                 console.log("Success: ", result);
             })
             .catch(error => {
+                window.scrollTo(0, 0);
+
                 console.log("Error: ", error);
             });
 
