@@ -11,22 +11,27 @@ import { ILogEntryProps } from "./types";
 
 const LogEntry = ({
     dateCreated,
-    dateLastModified,
     children,
 }: ILogEntryProps) => {
     const baseclass = "log-entry";
 
-    const date = new Date(dateLastModified);
+    const date = new Date(dateCreated);
+    // Adjust timezone for England.
+    let offset = date.getTimezoneOffset();
+    offset = Math.abs(offset / 60);
+    date.setHours(date.getHours() + offset);
 
-    const month = date.toLocaleString("en-US", { month: "short" });
-    const year = date.toLocaleString("en-US", { year: "numeric" });
-    const weekday = date.toLocaleString("en-US", {
+    const month = date.toLocaleString("en-GB", { month: "short", timeZone: 'Europe/London' });
+    const year = date.toLocaleString("en-GB", { year: "numeric", timeZone: 'Europe/London' });
+    const weekday = date.toLocaleString("en-GB", {
         weekday: "short",
+        timeZone: 'Europe/London',
     });
-    const day = date.toLocaleString("en-US", { day: "numeric" });
-    const time = date.toLocaleString("en-US", {
+    const day = date.toLocaleString("en-GB", { day: "numeric", timeZone: 'Europe/London' });
+    const time = date.toLocaleString("en-GB", {
         hour: "numeric",
         minute: "numeric",
+        timeZone: 'Europe/London',
     });
 
     return (
@@ -38,7 +43,7 @@ const LogEntry = ({
                 <div className={`${baseclass}__log_entry_header`}>
                     <div
                         className={`${baseclass}__log_entry_header_1`}>
-                        <h4>Last edit: {time}</h4>
+                        <h4>Created: {time}</h4>
                         <HistoryAttachment />
                         <Birthday />
                     </div>

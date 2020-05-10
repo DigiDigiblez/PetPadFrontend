@@ -36,7 +36,8 @@
     position: relative;
     text-align: left;
 
-    & > div {
+    &-content{
+      overflow: auto;
       height: 100%;
       position: absolute;
       width: 100%;

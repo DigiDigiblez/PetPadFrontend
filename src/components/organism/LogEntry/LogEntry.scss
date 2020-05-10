@@ -17,6 +17,8 @@
       min-height: 120px;
       text-align: left;
       width: 300px;
+      max-height: 300px;
+      overflow: auto;
 
       &_header {
         &_1 {
@@ -36,6 +38,7 @@
 
       &_body {
         margin: 10px 25px 25px;
+        overflow-wrap: break-word;
       }
     }
   }

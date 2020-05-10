@@ -9,17 +9,34 @@ import NavigateProfile from "../../../icons/navigate_profile.svg";
 import NavigatePad from "../../../icons/navigate_pad.svg";
 import NavigateHistory from "../../../icons/navigate_history.svg";
 import NavigateAssistant from "../../../icons/navigate_assistant.svg";
+import axios from "axios";
+import {ENDPOINT} from "../../../helpers/urls";
 
 const MainDrawerContent = () => {
     const baseclass = "main-drawer-content";
     const [auth, setAuth] = useState(false);
     const isAuthed = true;
 
-    let { name } = JSON.parse(
-        localStorage.getItem("petRegistrationData")!,
-    );
+    const [profileData, setProfileData] = useState({
+        name: "",
+    })
 
-    const petName = name ? name : "Pet";
+    useEffect(() => {
+        axios.get(ENDPOINT.PETS.GET_FIRST)
+            .then(result => {
+                setProfileData({
+                    ...profileData,
+                    ...result.data,
+                })
+
+                console.log("Success: ", result);
+            })
+            .catch(error => {
+                console.log("Error: ", error);
+            });
+    }, [])
+
+    const petName = profileData.name ? profileData.name : "Pet";
 
     useEffect(() => {
         // TODO - Axios request post-auth BE setup to toggle based on authed user
@@ -33,7 +50,7 @@ const MainDrawerContent = () => {
                     <div className={`${baseclass}__ctas`}>
                         <button className="primary_cta">
                             <NavLink to={ROUTES.HOMEPAGE}>
-                                {petName}'s Dashboard
+                                Homepage
                             </NavLink>
                         </button>
                         <button className="link_cta">

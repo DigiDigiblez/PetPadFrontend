@@ -1,15 +1,63 @@
 import "./Profile.scss";
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
 import * as PlaceholderProfileImage from "../../../res/profile_image.png";
 
 import Container from "../../atoms/Container";
 import Chrome from "../Chrome/Chrome";
-import persistToLocalStorage from "../../../helpers/utilities/persistToLocalStorage";
+import axios from "axios";
+import {ENDPOINT} from "../../../helpers/urls";
 
 const Profile = () => {
     const baseclass = "profile";
+
+    const [profileData, setProfileData] = useState({
+        name: undefined,
+        gender: undefined,
+        species: undefined,
+        breed: undefined,
+        weight: undefined,
+        height: undefined,
+        birthday: undefined,
+        favourite_toy: undefined,
+        favourite_food: undefined,
+        personality_trait: undefined,
+        social_google_plus_url: undefined,
+        social_facebook_url: undefined,
+        social_twitter_url: undefined,
+        social_instragram_url: undefined,
+        profile_image: undefined,
+        profile_completed: undefined,
+    })
+
+    // Capture new upload profile images
+    const [petProfileImage, setPetProfileImage] = useState(
+        profileData.profile_image,
+    );
+
+    const [birthdayField, setBirthdayField] = useState("")
+
+
+    useEffect(() => {
+        axios.get(ENDPOINT.PETS.GET_FIRST)
+            .then(result => {
+                setProfileData({
+                    ...profileData,
+                    ...result.data,
+                })
+
+                const oldDateFormat = new Date(result.data.birthday);
+                const birthdayDate = oldDateFormat.toISOString().split("T")[0];
+                const formattedBirthdayDate = birthdayDate.replace("/", "-");
+                setBirthdayField(formattedBirthdayDate)
+
+                console.log("Success: ", result);
+            })
+            .catch(error => {
+                console.log("Error: ", error);
+            });
+    }, [])
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -24,40 +72,27 @@ const Profile = () => {
             height,
         } = e.target;
 
-        let petData = JSON.parse(
-            localStorage.getItem("petRegistrationData")!,
-        );
-
         const completedPetData = {
-            name: name ? name.value : petData.name,
-            species: species ? species.value : petData.species,
-            breed: breed ? breed.value : petData.breed,
+            name: name ? name.value : profileData.name,
+            species: species ? species.value : profileData.species,
+            breed: breed ? breed.value : profileData.breed,
             favouriteToy: favouriteToy
                 ? favouriteToy.value
-                : petData.favouriteToy,
+                : profileData.favourite_toy,
             favouriteFood: favouriteFood
                 ? favouriteFood.value
-                : petData.favouriteFood,
+                : profileData.favourite_food,
             personalityTrait: personalityTrait
                 ? personalityTrait.value
-                : petData.personalityTrait,
-            weight: weight ? weight.value : petData.weight,
-            height: height ? height.value : petData.height,
+                : profileData.personality_trait,
+            weight: weight ? weight.value : profileData.weight,
+            height: height ? height.value : profileData.height,
         };
 
         // Check if the profile is complete
         const isComplete: boolean = Object.values(
             completedPetData,
         ).every(property => property);
-
-        petData = {
-            ...petData,
-            completedProfile: isComplete,
-            ...completedPetData,
-        };
-        // Trigger refresh
-        setHasCompletedProfile(isComplete);
-        setPetsName(name);
 
         const well = document.querySelector(".save-successful-well")!;
         const submitBtn = document.getElementById(
@@ -72,62 +107,79 @@ const Profile = () => {
             well.classList.toggle("hidden");
             submitBtn.disabled = false;
             submitBtn.style.cursor = "pointer";
-        }, 2000);
+            window.location.reload()
+        }, 500);
 
-        localStorage.setItem(
-            "petRegistrationData",
-            JSON.stringify(petData),
-        );
+        axios.patch(ENDPOINT.PETS.PATCH_FIRST, {
+            name: completedPetData.name || "",
+            species: completedPetData.species || "",
+            breed: completedPetData.breed || "",
+            weight: completedPetData.weight || 0,
+            height: completedPetData.height || 0,
+            favourite_toy: completedPetData.favouriteToy || "",
+            favourite_food: completedPetData.favouriteFood || "",
+            personality_trait: completedPetData.personalityTrait || "",
+            profile_completed: isComplete || false,
+        })
+            .then(result => {
+                axios.get(ENDPOINT.PETS.GET_FIRST)
+                    .then(result => {
+                        setProfileData({
+                            ...profileData,
+                            ...result.data,
+                        })
+
+                        console.log("Success: ", result);
+                    })
+                    .catch(error => {
+                        console.log("Error: ", error);
+                    });
+
+                console.log("Success: ", result);
+            })
+            .catch(error => {
+                console.log("Error: ", error);
+            });
     };
 
-    const {
-        name,
-        gender,
-        species,
-        breed,
-        // birthday,
-        favouriteToy,
-        favouriteFood,
-        personalityTrait,
-        weight,
-        height,
-        completedProfile,
-        profileImage,
-    } = JSON.parse(localStorage.getItem("petRegistrationData")!);
-
     let pronoun;
-    if (gender === "male") pronoun = "his";
-    else if (gender === "female") pronoun = "her";
+    if (profileData.gender === "male") pronoun = "his";
+    else if (profileData.gender === "female") pronoun = "her";
 
-    const petName = name ? name : "Pet";
-
-    const [, setHasCompletedProfile] = useState(completedProfile);
-    const [, setPetsName] = useState(completedProfile);
+    const petName = profileData.name || "Pet";
 
     // Click the file uploader input when the profile image container is clicked
     const handleFileUploader = () => {
         document.getElementById("upload-image")!.click();
     };
 
-    // Capture new upload profile images
-    const [petProfileImage, setPetProfileImage] = useState(
-        profileImage || PlaceholderProfileImage,
-    );
-
-    // Set new uploaded images to local storage, base64 encoded, trigger refresh.
-    useEffect(() => {
-        persistToLocalStorage(
-            "petRegistrationData",
-            "profileImage",
-            petProfileImage,
-        );
-    }, [petProfileImage]);
-
     const encodeImageFileAsURL = (files: any): void => {
         if (files && files[0]) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setPetProfileImage(reader.result);
+                axios.patch(ENDPOINT.PETS.PATCH_FIRST, {
+                    profile_image: reader.result || "",
+                })
+                    .then(result => {
+                        axios.get(ENDPOINT.PETS.GET_FIRST)
+                            .then(result => {
+                                setProfileData({
+                                    ...profileData,
+                                    ...result.data,
+                                })
+
+                                console.log("Success: ", result);
+                            })
+                            .catch(error => {
+                                console.log("Error: ", error);
+                            });
+
+                        console.log("Success: ", result);
+                    })
+                    .catch(error => {
+                        console.log("Error: ", error);
+                    });
+
             };
             reader.readAsDataURL(files[0]);
         }
@@ -137,18 +189,17 @@ const Profile = () => {
         <Container className={baseclass}>
             <Chrome>
                 <Container className={`${baseclass}__content`}>
-                    <h2>{petName}'s Profile</h2>
+                    <h2>{petName || "Pet"}'s Profile</h2>
                     <Container className={`${baseclass}__pet_avatar`}>
                         <img
                             onClick={handleFileUploader}
-                            src={
-                                (petProfileImage as unknown) as string
-                            }
+                            // @ts-ignore
+                            src={profileData.profile_image}
                             alt={`${petName}`}
                             id="profile-image"
                         />
                         {petProfileImage ===
-                            PlaceholderProfileImage && (
+                        PlaceholderProfileImage && (
                             <span className="change-image">
                                 Upload image
                             </span>
@@ -168,7 +219,7 @@ const Profile = () => {
                     <Container className={`${baseclass}__pet_data`}>
                         <span
                             className={`${baseclass}__pet_data_title`}>
-                            {completedProfile ? (
+                            {profileData.profile_completed ? (
                                 <h4>
                                     {petName
                                         ? `${petName}'s`
@@ -190,7 +241,7 @@ const Profile = () => {
                                 name="name"
                                 type="text"
                                 placeholder={`${petName}'s name`}
-                                defaultValue={petName}
+                                defaultValue={profileData.name}
                                 id="form-name"
                             />
 
@@ -198,7 +249,7 @@ const Profile = () => {
                                 name="species"
                                 type="text"
                                 placeholder={`${petName}'s species`}
-                                defaultValue={species}
+                                defaultValue={profileData.species}
                                 id="form-species"
                             />
 
@@ -206,15 +257,22 @@ const Profile = () => {
                                 name="breed"
                                 type="text"
                                 placeholder={`${petName}'s breed`}
-                                defaultValue={breed}
+                                defaultValue={profileData.breed}
                                 id="form-breed"
+                            />
+
+                            <input
+                                name="breed"
+                                type="date"
+                                defaultValue={birthdayField}
+                                id="form-birthday"
                             />
 
                             <input
                                 name="favouriteToy"
                                 type="text"
                                 placeholder={`${petName}'s favourite toy`}
-                                defaultValue={favouriteToy}
+                                defaultValue={profileData.favourite_toy}
                                 id="form-favourite-toy"
                             />
 
@@ -222,7 +280,7 @@ const Profile = () => {
                                 name="favouriteFood"
                                 type="text"
                                 placeholder={`${petName}'s favourite food`}
-                                defaultValue={favouriteFood}
+                                defaultValue={profileData.favourite_food}
                                 id="form-favourite-food"
                             />
 
@@ -230,7 +288,7 @@ const Profile = () => {
                                 name="personalityTrait"
                                 type="text"
                                 placeholder={`${petName}'s personality trait`}
-                                defaultValue={personalityTrait}
+                                defaultValue={profileData.personality_trait}
                                 id="form-personality-trait"
                             />
 
@@ -238,7 +296,7 @@ const Profile = () => {
                                 name="weight"
                                 type="text"
                                 placeholder={`${petName}'s weight (in kg)`}
-                                defaultValue={weight}
+                                defaultValue={profileData.weight}
                                 id="form-weight"
                             />
 
@@ -246,7 +304,7 @@ const Profile = () => {
                                 name="height"
                                 type="text"
                                 placeholder={`${petName}'s height (in cm)`}
-                                defaultValue={height}
+                                defaultValue={profileData.height}
                                 id="form-height"
                             />
 
@@ -254,7 +312,7 @@ const Profile = () => {
                                 type="submit"
                                 className="secondary_cta"
                                 id="save-profile-data-btn">
-                                Continue
+                                Update profile
                             </button>
 
                             <div

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 export interface ILogEntryProps {
-    dateCreated: string;
-    dateLastModified: string;
+    dateCreated: Date;
+    dateLastModified: Date;
     children: ReactNode;
 }

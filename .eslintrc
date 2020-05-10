@@ -77,7 +77,7 @@
 		"fetch": true,
 		"location": true,
 		"navigator": true,
-		"self": true
+		"self": true,
 	},
 	"env": {
 		"jest/globals": true,

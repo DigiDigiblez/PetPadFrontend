@@ -18,7 +18,7 @@ if (!localStorage.getItem("petRegistrationData")) {
             gender: "",
             species: "",
             breed: "",
-            birthday: "",
+            birthday: null,
             favouriteToy: "",
             favouriteFood: "",
             personalityTrait: "",

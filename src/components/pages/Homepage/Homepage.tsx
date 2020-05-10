@@ -10,7 +10,7 @@ const Homepage = () => {
     return (
         <Container className={baseclass}>
             <Chrome>
-                <Hero />
+                <Hero/>
             </Chrome>
         </Container>
     );
