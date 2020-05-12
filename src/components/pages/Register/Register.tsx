@@ -11,10 +11,29 @@ const Register = () => {
 
     const currentStep = Number(localStorage.getItem("currentStep"));
 
+    function parseJwt(token: string) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) =>
+            '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join(''));
+
+        return JSON.parse(jsonPayload);
+    }
+
     // Grab authenticated user's bearer token (JWT) and stash it in local storage
     if (window.location.hash) {
-        const JWT = window.location.hash.substring(1);
+        // Retrieve token from JWT data
+        const JWT = window.location.hash.match(/#access_token=([^&]*)&/)![1];
+        // Retrieve token permissions
+        const JWTPermissions = parseJwt(JWT).permissions;
+
+        // Determine user type from premium-only permission inclusion
+        const premiumPermission = JWTPermissions.find((permission: string) => permission === "delete:post" || permission === "patch:post")
+        const userType = premiumPermission ? "Premium User" : "Free User";
+
         localStorage.setItem("jwt", JWT);
+        localStorage.setItem("userType", userType);
     }
 
     return (

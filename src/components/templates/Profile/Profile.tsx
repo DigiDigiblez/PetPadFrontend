@@ -40,7 +40,13 @@ const Profile = () => {
 
 
     useEffect(() => {
-        axios.get(ENDPOINT.PETS.GET_FIRST)
+        const JWT = localStorage.getItem("jwt");
+
+        const config = {
+            headers: {Authorization: `Bearer ${JWT}`}
+        };
+
+        axios.get(ENDPOINT.PETS.GET_FIRST, config)
             .then(result => {
                 setProfileData({
                     ...profileData,
@@ -112,19 +118,28 @@ const Profile = () => {
 
         console.log(e.target)
 
-        axios.patch(ENDPOINT.PETS.PATCH_FIRST, {
-            name: completedPetData.name || "",
-            species: completedPetData.species || "",
-            breed: completedPetData.breed || "",
-            weight: completedPetData.weight || 0,
-            height: completedPetData.height || 0,
-            favourite_toy: completedPetData.favourite_toy || "",
-            favourite_food: completedPetData.favourite_food || "",
-            personality_trait: completedPetData.personality_trait || "",
-            profile_completed: isComplete || false,
-        })
+        const JWT = localStorage.getItem("jwt");
+
+        const config = {
+            headers: {Authorization: `Bearer ${JWT}`}
+        };
+
+        axios.patch(ENDPOINT.PETS.PATCH_FIRST,
+            {
+                name: completedPetData.name || "",
+                species: completedPetData.species || "",
+                breed: completedPetData.breed || "",
+                weight: completedPetData.weight || 0,
+                height: completedPetData.height || 0,
+                favourite_toy: completedPetData.favourite_toy || "",
+                favourite_food: completedPetData.favourite_food || "",
+                personality_trait: completedPetData.personality_trait || "",
+                profile_completed: isComplete || false,
+            },
+            config,
+        )
             .then(result => {
-                axios.get(ENDPOINT.PETS.GET_FIRST)
+                axios.get(ENDPOINT.PETS.GET_FIRST, config)
                     .then(result => {
                         setProfileData({
                             ...profileData,
@@ -178,11 +193,20 @@ const Profile = () => {
             const reader = new FileReader();
 
             reader.onloadend = () => {
-                axios.patch(ENDPOINT.PETS.PATCH_FIRST, {
-                    profile_image: reader.result || "",
-                })
+                const JWT = localStorage.getItem("jwt");
+
+                const config = {
+                    headers: {Authorization: `Bearer ${JWT}`}
+                };
+
+                axios.patch(ENDPOINT.PETS.PATCH_FIRST,
+                    {
+                        profile_image: reader.result || "",
+                    },
+                    config,
+                )
                     .then(result => {
-                        axios.get(ENDPOINT.PETS.GET_FIRST)
+                        axios.get(ENDPOINT.PETS.GET_FIRST, config)
                             .then(result => {
                                 setProfileData({
                                     ...profileData,

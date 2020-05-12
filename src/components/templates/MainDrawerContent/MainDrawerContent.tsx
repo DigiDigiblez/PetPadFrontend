@@ -24,7 +24,13 @@ const MainDrawerContent = () => {
     })
 
     useEffect(() => {
-        axios.get(ENDPOINT.PETS.GET_FIRST)
+        const JWT = localStorage.getItem("jwt");
+
+        const config = {
+            headers: {Authorization: `Bearer ${JWT}`}
+        };
+
+        axios.get(ENDPOINT.PETS.GET_FIRST, config)
             .then(result => {
                 setProfileData({
                     ...profileData,

@@ -75,7 +75,7 @@ const RegisterStageTwo = () => {
                 <div>
                     <label htmlFor="weight">
                         What is {petName}'s{" "}
-                        <span className="emphasis">weight</span>?
+                        <span className="emphasis">weight</span> (kg)?
                     </label>
                     <input
                         name="weight"
@@ -90,7 +90,7 @@ const RegisterStageTwo = () => {
                 <div>
                     <label htmlFor="height">
                         What is {petName}'s{" "}
-                        <span className="emphasis">height</span>?
+                        <span className="emphasis">height</span> (cm)?
                     </label>
                     <input
                         name="height"

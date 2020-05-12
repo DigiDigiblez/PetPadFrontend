@@ -39,7 +39,13 @@ const Pad = (props: any) => {
     const [nameAlternative, setNameAlternative] = useState("they");
 
     useEffect(() => {
-        axios.get(ENDPOINT.PETS.GET_FIRST)
+        const JWT = localStorage.getItem("jwt");
+
+        const config = {
+            headers: {Authorization: `Bearer ${JWT}`}
+        };
+
+        axios.get(ENDPOINT.PETS.GET_FIRST, config)
             .then(result => {
                 setProfileData({
                     ...profileData,
@@ -111,16 +117,24 @@ const Pad = (props: any) => {
         if (editingPostContent) {
             if (!activeMood.moodLabel) {
                 return alert("Please select a mood before republishing.")
-            }
-            else if (currentContent == "") {
+            } else if (currentContent == "") {
                 return alert("Please provide content before republishing.")
             }
 
-            axios.patch(`${ENDPOINT.POSTS.PATCH_SPECIFIC}${editingPostId}`, {
-                mood: activeMood.moodLabel || "",
-                content: currentContent || "",
-                date_last_modified: new Date(),
-            })
+            const JWT = localStorage.getItem("jwt");
+
+            const config = {
+                headers: {Authorization: `Bearer ${JWT}`}
+            };
+
+            axios.patch(`${ENDPOINT.POSTS.PATCH_SPECIFIC}${editingPostId}`,
+                {
+                    mood: activeMood.moodLabel || "",
+                    content: currentContent || "",
+                    date_last_modified: new Date(),
+                },
+                config,
+            )
                 .then(result => {
                     window.scrollTo(0, 0);
                     history.push("/history")
@@ -137,18 +151,26 @@ const Pad = (props: any) => {
         else {
             if (!activeMood.moodLabel) {
                 return alert("Please select a mood before publishing.")
-            }
-            else if (currentContent == "") {
+            } else if (currentContent == "") {
                 return alert("Please provide content before publishing.")
             }
 
-            axios.post(ENDPOINT.POSTS.POST, {
-                mood: activeMood.moodLabel || "",
-                content: currentContent || "",
-                creation_datetime: new Date(),
-                date_last_modified: new Date(),
-                is_open: false,
-            })
+            const JWT = localStorage.getItem("jwt");
+
+            const config = {
+                headers: {Authorization: `Bearer ${JWT}`}
+            };
+
+            axios.post(ENDPOINT.POSTS.POST,
+                {
+                    mood: activeMood.moodLabel || "",
+                    content: currentContent || "",
+                    creation_datetime: new Date(),
+                    date_last_modified: new Date(),
+                    is_open: false,
+                },
+                config,
+            )
                 .then(result => {
                     window.scrollTo(0, 0);
 

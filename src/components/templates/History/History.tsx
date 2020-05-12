@@ -28,7 +28,13 @@ const History = () => {
     const [postData, setPostData] = useState({posts: [], total_posts: 0} as IPostList)
 
     useEffect(() => {
-        axios.get(ENDPOINT.PETS.GET_FIRST)
+        const JWT = localStorage.getItem("jwt");
+
+        const config = {
+            headers: {Authorization: `Bearer ${JWT}`}
+        };
+
+        axios.get(ENDPOINT.PETS.GET_FIRST, config)
             .then(result => {
                 setProfileData({
                     ...profileData,
@@ -41,7 +47,7 @@ const History = () => {
                 console.log("Error: ", error);
             });
 
-        axios.get(ENDPOINT.POSTS.GET_ALL)
+        axios.get(ENDPOINT.POSTS.GET_ALL, config)
             .then(result => {
                 setPostData({
                     ...result.data,

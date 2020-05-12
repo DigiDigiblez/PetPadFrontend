@@ -81,21 +81,33 @@ const LogEntry = ({
         well.classList.toggle("hidden");
 
         setTimeout(() => {
-            axios.delete(`${ENDPOINT.POSTS.DELETE_SPECIFIC}${id}`)
-            .then(result => {
-                well.classList.toggle("hidden");
-                window.location.reload()
+            const JWT = localStorage.getItem("jwt");
 
-                console.log("Success: ", result);
-            })
-            .catch(error => {
-                console.log("Error: ", error);
-            });
+            const config = {
+                headers: {Authorization: `Bearer ${JWT}`}
+            };
+
+            axios.delete(`${ENDPOINT.POSTS.DELETE_SPECIFIC}${id}`, config)
+                .then(result => {
+                    well.classList.toggle("hidden");
+                    window.location.reload()
+
+                    console.log("Success: ", result);
+                })
+                .catch(error => {
+                    console.log("Error: ", error);
+                });
         }, 500);
     }
 
     useEffect(() => {
-        axios.get(ENDPOINT.PETS.GET_FIRST)
+        const JWT = localStorage.getItem("jwt");
+
+        const config = {
+            headers: {Authorization: `Bearer ${JWT}`}
+        };
+
+        axios.get(ENDPOINT.PETS.GET_FIRST, config)
             .then(result => {
                 setProfileData({
                     ...profileData,
