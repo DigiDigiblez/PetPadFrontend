@@ -86,7 +86,7 @@ const Pad = (props: any) => {
         moodTarget: null,
         moodLabel: "",
     });
-    const [currentContent, setCurrentContent] = useState(editingPostMood || "")
+    let [currentContent, setCurrentContent] = useState(editingPostMood || "")
 
     const selectMood = (e: any) => {
         const moods = document.getElementsByClassName("mood");
@@ -133,9 +133,20 @@ const Pad = (props: any) => {
                 },
                 config,
             )
-                .then(result => {
-                    window.scrollTo(0, 0);
-                    history.push("/history")
+                .then((result) => {
+                    axios.get(`${ENDPOINT.POSTS.GET_SPECIFIC}${editingPostId}`, config)
+                        .then(result => {
+                            window.scrollTo(0, 0);
+                            activeMood.moodLabel = result.data.mood;
+                            currentContent = result.data.content;
+
+                            history.push("/history")
+                        })
+                        .catch(error => {
+                            window.scrollTo(0, 0);
+
+                            console.log("Error: ", error);
+                        });
 
                     console.log("Success: ", result);
                 })
@@ -194,7 +205,6 @@ const Pad = (props: any) => {
             well.classList.toggle("hidden");
             submitBtn.disabled = false;
             submitBtn.style.cursor = "pointer";
-            window.location.reload();
         }, 500);
     }
 

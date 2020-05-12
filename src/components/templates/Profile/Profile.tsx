@@ -113,7 +113,7 @@ const Profile = () => {
             well.classList.toggle("hidden");
             submitBtn.disabled = false;
             submitBtn.style.cursor = "pointer";
-            // window.location.reload()
+            window.location.reload()
         }, 500);
 
         console.log(e.target)

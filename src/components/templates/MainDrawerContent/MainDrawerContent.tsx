@@ -58,6 +58,7 @@ const MainDrawerContent = () => {
     const handleLogout = () => {
         localStorage.removeItem("jwt");
         localStorage.removeItem("userType");
+        localStorage.removeItem("completedRegistration");
     }
 
     return (

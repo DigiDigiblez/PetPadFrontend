@@ -77,31 +77,34 @@ const LogEntry = ({
             return alert("You are on a FREE account. Only PREMIUM account users can delete posts.")
         }
 
-        const well = document.querySelector(".save-successful-well")!;
-        const submitBtn = document.getElementById(
-            "save-profile-data-btn",
-        )! as HTMLInputElement;
+        const result = window.confirm("Are you absolutely sure you want to IRREVERSIBLY delete this post?");
+        if (result) {
+            const well = document.querySelector(".save-successful-well")!;
+            const submitBtn = document.getElementById(
+                "save-profile-data-btn",
+            )! as HTMLInputElement;
 
-        well.classList.toggle("hidden");
+            well.classList.toggle("hidden");
 
-        setTimeout(() => {
-            const JWT = localStorage.getItem("jwt");
+            setTimeout(() => {
+                const JWT = localStorage.getItem("jwt");
 
-            const config = {
-                headers: {Authorization: `Bearer ${JWT}`}
-            };
+                const config = {
+                    headers: {Authorization: `Bearer ${JWT}`}
+                };
 
-            axios.delete(`${ENDPOINT.POSTS.DELETE_SPECIFIC}${id}`, config)
-                .then(result => {
-                    well.classList.toggle("hidden");
-                    window.location.reload()
+                axios.delete(`${ENDPOINT.POSTS.DELETE_SPECIFIC}${id}`, config)
+                    .then(result => {
+                        well.classList.toggle("hidden");
+                        window.location.reload()
 
-                    console.log("Success: ", result);
-                })
-                .catch(error => {
-                    console.log("Error: ", error);
-                });
-        }, 500);
+                        console.log("Success: ", result);
+                    })
+                    .catch(error => {
+                        console.log("Error: ", error);
+                    });
+            }, 500);
+        }
     }
 
     useEffect(() => {
