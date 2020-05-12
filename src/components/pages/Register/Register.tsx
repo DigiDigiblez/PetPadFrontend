@@ -5,21 +5,12 @@ import Chrome from "../../templates/Chrome/Chrome";
 import RegisterStageOne from "../../templates/RegisterStageOne";
 import RegisterStageThree from "../../templates/RegisterStageThree";
 import RegisterStageTwo from "../../templates/RegisterStageTwo";
+import parseJwt from "../../../helpers/utilities/parseJwt";
 
 const Register = () => {
     const baseclass = "register";
 
     const currentStep = Number(localStorage.getItem("currentStep"));
-
-    function parseJwt(token: string) {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) =>
-            '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-        ).join(''));
-
-        return JSON.parse(jsonPayload);
-    }
 
     // Grab authenticated user's bearer token (JWT) and stash it in local storage
     if (window.location.hash) {

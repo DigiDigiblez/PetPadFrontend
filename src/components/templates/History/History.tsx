@@ -6,23 +6,10 @@ import Chrome from "../Chrome/Chrome";
 import LogEntry from "../../organism/LogEntry";
 import axios from "axios";
 import {ENDPOINT} from "../../../helpers/urls";
+import {IPostData, IPostList} from "./types";
 
 const History = () => {
     const baseclass = "history";
-
-    interface IPostData {
-        id: number;
-        mood: string;
-        content: string;
-        creation_datetime: Date;
-        date_last_modified: Date;
-        is_open: boolean;
-    }
-
-    interface IPostList {
-        posts: IPostData[];
-        total_posts: number;
-    }
 
     const [profileData, setProfileData] = useState({name: "Pet", birthday: new Date()})
     const [postData, setPostData] = useState({posts: [], total_posts: 0} as IPostList)

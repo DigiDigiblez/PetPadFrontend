@@ -17,6 +17,7 @@ const MainDrawerContent = () => {
 
     const history = useHistory();
 
+    const isPremiumUser = localStorage.getItem("userType") === "Premium User";
     const isAuthed = Boolean(localStorage.getItem("jwt"))
 
     const [profileData, setProfileData] = useState({
@@ -47,8 +48,8 @@ const MainDrawerContent = () => {
     const petName = profileData.name ? profileData.name : "Pet";
 
     const checkIfAuthed = (isAuthed: boolean) => {
-        if (!isAuthed) {
-            return alert("You are on a FREE TIER account. Please upgrade to PREMIUM to use this feature.")
+        if (isAuthed && !isPremiumUser) {
+            return alert("You are on a FREE account. Only PREMIUM account users can meet the assistant.")
         }
 
         history.push("/assistant");

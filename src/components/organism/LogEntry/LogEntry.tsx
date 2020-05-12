@@ -32,7 +32,8 @@ const LogEntry = ({
 
     const history = useHistory();
 
-    const isAuthed = Boolean(localStorage.getItem("jwt"))
+    const isPremiumUser = localStorage.getItem("userType") === "Premium User";
+    const isAuthed = localStorage.getItem("jwt") !== null;
 
     const date = new Date(dateCreated);
     // Adjust timezone for England.
@@ -60,8 +61,11 @@ const LogEntry = ({
     })
 
     const handleUpdatingPost = () => {
-        if (!isAuthed) {
-            return alert("You are on a FREE TIER account. Only PREMIUM users can edit posts.")
+        console.log(!isAuthed)
+        console.log(!isPremiumUser)
+
+        if (isAuthed && !isPremiumUser) {
+            return alert("You are on a FREE account. Only PREMIUM account users can update posts.")
         }
 
         // Take user to their Pet Pad to edit the specific post.
@@ -69,8 +73,8 @@ const LogEntry = ({
     }
 
     const handleDeletingPost = () => {
-        if (!isAuthed) {
-            return alert("You are on a FREE TIER account. Only PREMIUM users can delete posts.")
+        if (isAuthed && !isPremiumUser) {
+            return alert("You are on a FREE account. Only PREMIUM account users can delete posts.")
         }
 
         const well = document.querySelector(".save-successful-well")!;
@@ -137,7 +141,7 @@ const LogEntry = ({
                         <HistoryAttachment
                             onClick={() => alert("Attachments feature coming soon. Icon for proof of concept.")}/>
                         {postedOnBirthday && <Birthday
-                            onClick={() => !isAuthed && alert(`Happy birthday ${profileData.name}! Have a good day!`)}/>}
+                            onClick={() => alert(`Happy birthday ${profileData.name}! Have a good day!`)}/>}
                     </div>
                     <div
                         className={`${baseclass}__log_entry_header_2`}>

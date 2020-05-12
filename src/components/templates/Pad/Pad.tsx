@@ -70,8 +70,6 @@ const Pad = (props: any) => {
                 const name = mood.getAttribute("name")
                 activeMood.moodLabel = editingPostMood;
 
-                console.log(name, editingPostMood)
-
                 if (name === editingPostMood) {
                     console.log(name, editingPostMood)
                     mood.style.border = "solid 5px green";
