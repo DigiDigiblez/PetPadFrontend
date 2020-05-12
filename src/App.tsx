@@ -6,9 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import Container from "./components/atoms/Container";
 import Routes from "./components/pages/Routes";
 
-if (!localStorage.getItem("currentStep")) {
-    localStorage.setItem("currentStep", "1");
-}
+localStorage.setItem("currentStep", "1");
 
 const App = () => {
     const baseclass = "app";

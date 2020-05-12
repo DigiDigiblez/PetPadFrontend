@@ -2,8 +2,8 @@ import "./Header.scss";
 
 import React, {useEffect, useState} from "react";
 
-import { ReactComponent as Hamburger } from "../../../icons/hamburger.svg";
-import { ReactComponent as Logo } from "../../../icons/logo.svg";
+import {ReactComponent as Hamburger} from "../../../icons/hamburger.svg";
+import {ReactComponent as Logo} from "../../../icons/logo.svg";
 import Overlay from "../../molecules/Overlay";
 import MainDrawerContent from "../../templates/MainDrawerContent/MainDrawerContent";
 import Drawer from "../Drawer/Drawer";
@@ -19,6 +19,9 @@ const Header = () => {
     const [profileData, setProfileData] = useState({
         name: "",
     })
+
+    const isAuthed = Boolean(localStorage.getItem("jwt"))
+    const hasCompletedRegistration = Boolean(localStorage.getItem("completedRegistration"))
 
     useEffect(() => {
         axios.get(ENDPOINT.PETS.GET_FIRST)
@@ -38,21 +41,24 @@ const Header = () => {
     return (
         <header className={baseclass}>
             <Container className={`${baseclass}__logo`}>
-                <Logo className={`${baseclass}__logo_image`} />
+                <Logo className={`${baseclass}__logo_image`}/>
                 <h2 className={`${baseclass}__logo_name`}>
                     {profileData.name ? `${profileData.name}` : "Pet Pad"}
                 </h2>
             </Container>
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-            <span onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                <Hamburger className={`${baseclass}__hamburger`} />
-            </span>
+
+            {isAuthed && hasCompletedRegistration && (
+                <span onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    <Hamburger className={`${baseclass}__hamburger`}/>
+                </span>
+            )}
+
             {isMenuOpen && (
                 <>
                     <Drawer>
-                        <MainDrawerContent />
+                        <MainDrawerContent/>
                     </Drawer>
-                    <Overlay version="drawer" />
+                    <Overlay version="drawer"/>
                 </>
             )}
         </header>

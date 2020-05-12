@@ -30,7 +30,7 @@ Throughout the app, we refer to the pet by it's actual name. The app even provid
 The main features of this application are:
 - `Homepage`: From here pet owners are greeted with the front face of the app, with a button allowing them to register for free. When the user is authenticated they will be able to see a hamburger icon to open other features of the app
 - `Auth0 authorisation screen`: Pet owners will come here from the homepage registration button; where they must authenticate to proceed
-- `Registration form`: Pet owners here will register their pet across two screens; providing it's basic details like gender, name, height, and weight
+- `Registration form`: Pet owners here will register their pet across two screens; providing it's basic details like gender, name, height, and weight. The form uses strict Regex pattern matching and required fields to prevent erroneous data or lack thereof.
 - `Pet Profile`: Pet owners can amend and add further details about their pet, including their own personal picture (`which must be an image, no greater than 2MB`)
 - `Pet Pad`: Pet owners can keep a daily journal about their pet's mood and activities, which are timestamped by date created and date last modified
 - `Pet History`: Pet owners can see a log of all their journal entries here, and can freely delete and amend them if they are Premium Users

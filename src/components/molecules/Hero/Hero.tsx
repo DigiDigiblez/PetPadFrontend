@@ -1,24 +1,23 @@
 import "./Hero.scss";
 
 import React from "react";
-import { NavLink } from "react-router-dom";
 
 import Container from "../../atoms/Container";
-import { ROUTES } from "../../pages/Routes/types";
 
 const Hero = () => {
     const baseclass = "hero";
 
     return (
         <Container className={baseclass}>
-            <div className={`${baseclass}__background`} />
-            <div className={`${baseclass}__text`} />
+            <div className={`${baseclass}__background`}/>
+            <div className={`${baseclass}__text`}/>
             <div className={`${baseclass}__content`}>
-                <NavLink to={ROUTES.REGISTER}>
+                {/* Get user to authenticated using Auth0 */}
+                <a href="https://fsnd2020.auth0.com/authorize?audience=petpad&response_type=token&client_id=Lhk2zF5M6CxLT4YoniUSIJMtelNQHmkR&redirect_uri=http://localhost:3000/register">
                     <button className="primary_cta">
                         Register for free!
                     </button>
-                </NavLink>
+                </a>
             </div>
         </Container>
     );

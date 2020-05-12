@@ -1,3 +1,5 @@
+import "./RegisterStageTwo.scss";
+
 import React from "react";
 
 import Container from "../../atoms/Container";
@@ -48,7 +50,7 @@ const RegisterStageTwo = () => {
                         <span className="emphasis">{petName}</span>?
                     </label>
                     <select name="species" id="form-species" required>
-                        <option disabled selected>
+                        <option value="" disabled selected>
                             {petName} is a
                         </option>
                         <option value="Dog">Dog</option>
@@ -61,7 +63,7 @@ const RegisterStageTwo = () => {
                         <span className="emphasis">breed</span>?
                     </label>
                     <select name="breed" id="form-breed" required>
-                        <option disabled selected>
+                        <option value="" disabled selected>
                             {petName}'s breed is a
                         </option>
                         <option value="Border Collie">

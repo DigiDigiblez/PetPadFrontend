@@ -32,7 +32,7 @@ const LogEntry = ({
 
     const history = useHistory();
 
-    const isPremium = true; // TODO
+    const isAuthed = Boolean(localStorage.getItem("jwt"))
 
     const date = new Date(dateCreated);
     // Adjust timezone for England.
@@ -60,7 +60,7 @@ const LogEntry = ({
     })
 
     const handleUpdatingPost = () => {
-        if (!isPremium) {
+        if (!isAuthed) {
             return alert("You are on a FREE TIER account. Only PREMIUM users can edit posts.")
         }
 
@@ -69,7 +69,7 @@ const LogEntry = ({
     }
 
     const handleDeletingPost = () => {
-        if (!isPremium) {
+        if (!isAuthed) {
             return alert("You are on a FREE TIER account. Only PREMIUM users can delete posts.")
         }
 
@@ -125,7 +125,7 @@ const LogEntry = ({
                         <HistoryAttachment
                             onClick={() => alert("Attachments feature coming soon. Icon for proof of concept.")}/>
                         {postedOnBirthday && <Birthday
-                            onClick={() => !isPremium && alert(`Happy birthday ${profileData.name}! Have a good day!`)}/>}
+                            onClick={() => !isAuthed && alert(`Happy birthday ${profileData.name}! Have a good day!`)}/>}
                     </div>
                     <div
                         className={`${baseclass}__log_entry_header_2`}>

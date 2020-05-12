@@ -1,10 +1,10 @@
 import "./MainDrawerContent.scss";
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {NavLink, useHistory} from "react-router-dom";
 import Container from "../../atoms/Container";
 import DrawerNavItem from "../../atoms/DrawerNavItem/DrawerNavItem";
-import { ROUTES } from "../../pages/Routes/types";
+import {ROUTES} from "../../pages/Routes/types";
 import NavigateProfile from "../../../icons/navigate_profile.svg";
 import NavigatePad from "../../../icons/navigate_pad.svg";
 import NavigateHistory from "../../../icons/navigate_history.svg";
@@ -17,9 +17,7 @@ const MainDrawerContent = () => {
 
     const history = useHistory();
 
-    const [auth, setAuth] = useState(false);
-    const isAuthed = true; // TODO
-    const isPremium = true; // TODO
+    const isAuthed = Boolean(localStorage.getItem("jwt"))
 
     const [profileData, setProfileData] = useState({
         name: "",
@@ -42,89 +40,59 @@ const MainDrawerContent = () => {
 
     const petName = profileData.name ? profileData.name : "Pet";
 
-    const checkIfPremium = (isPremium: boolean) => {
-    if (!isPremium) {
-        return alert("You are on a FREE TIER account. Please upgrade to PREMIUM to use this feature.")
+    const checkIfAuthed = (isAuthed: boolean) => {
+        if (!isAuthed) {
+            return alert("You are on a FREE TIER account. Please upgrade to PREMIUM to use this feature.")
+        }
+
+        history.push("/assistant");
     }
-
-    history.push("/assistant");
-}
-
-    useEffect(() => {
-        // TODO - Axios request post-auth BE setup to toggle based on authed user
-        setAuth(localStorage.getItem("auth") === "true");
-    }, []);
 
     return (
         <Container className={baseclass}>
-            {isAuthed ? (
-                <Container className={`${baseclass}__authed`}>
-                    <div className={`${baseclass}__ctas`}>
-                        <button className="primary_cta">
-                            <NavLink to={ROUTES.HOMEPAGE}>
-                                Homepage
-                            </NavLink>
-                        </button>
-                        <button className="link_cta">
-                            <NavLink to={ROUTES.HOMEPAGE}>
-                                Or sign out
-                            </NavLink>
-                        </button>
-                    </div>
-                    <div className={`${baseclass}__drawers`}>
-                        <h2>Navigate</h2>
-                        <DrawerNavItem
-                            to="/profile"
-                            badge={NavigateProfile}
-                            alt={`Navigate to ${petName}'s profile`}
-                            text={`${petName}'s profile`}
-                        />
-                        <DrawerNavItem
-                            to="/pad"
-                            badge={NavigatePad}
-                            alt={`Navigate to ${petName}'s pad`}
-                            text={`${petName}'s pad`}
-                        />
-                        <DrawerNavItem
-                            to="/history"
-                            badge={NavigateHistory}
-                            alt={`Navigate to ${petName}'s history`}
-                            text={`${petName}'s history`}
-                        />
-                        <span onClick={() => checkIfPremium(isPremium)}>
+            <Container className={`${baseclass}__authed`}>
+                <div className={`${baseclass}__ctas`}>
+                    <button className="primary_cta">
+                        <NavLink to={ROUTES.HOMEPAGE}>
+                            Homepage
+                        </NavLink>
+                    </button>
+                    <button className="link_cta">
+                        <NavLink to={ROUTES.HOMEPAGE}>
+                            Or sign out
+                        </NavLink>
+                    </button>
+                </div>
+                <div className={`${baseclass}__drawers`}>
+                    <h2>Navigate</h2>
+                    <DrawerNavItem
+                        to="/profile"
+                        badge={NavigateProfile}
+                        alt={`Navigate to ${petName}'s profile`}
+                        text={`${petName}'s profile`}
+                    />
+                    <DrawerNavItem
+                        to="/pad"
+                        badge={NavigatePad}
+                        alt={`Navigate to ${petName}'s pad`}
+                        text={`${petName}'s pad`}
+                    />
+                    <DrawerNavItem
+                        to="/history"
+                        badge={NavigateHistory}
+                        alt={`Navigate to ${petName}'s history`}
+                        text={`${petName}'s history`}
+                    />
+                    <span onClick={() => checkIfAuthed(isAuthed)}>
                             <DrawerNavItem
-                            badge={NavigateAssistant}
-                            alt={`Navigate to ${petName}'s assistant`}
-                            text={`${petName}'s assistant`}
-                            premium
-                        />
+                                badge={NavigateAssistant}
+                                alt={`Navigate to ${petName}'s assistant`}
+                                text={`${petName}'s assistant`}
+                                premium
+                            />
                         </span>
-                    </div>
-                </Container>
-            ) : (
-                <Container className={`${baseclass}__authed`}>
-                    <div className={`${baseclass}__ctas`}>
-                        <button className="primary_cta">
-                            <NavLink to={ROUTES.HOMEPAGE}>
-                                Register for free!
-                            </NavLink>
-                        </button>
-                        <button className="primary_cta">
-                            <NavLink to={ROUTES.HOMEPAGE}>
-                                Or sign in
-                            </NavLink>
-                        </button>
-                        <button
-                            onClick={() =>
-                                alert(
-                                    "Auth not currently set up in the backend!",
-                                )
-                            }>
-                            Toggle Auth
-                        </button>
-                    </div>
-                </Container>
-            )}
+                </div>
+            </Container>
         </Container>
     );
 };

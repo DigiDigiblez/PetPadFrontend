@@ -57,8 +57,9 @@ const RegisterStageThree = () => {
         } else {
             etaForBuild.seconds = 3;
 
+            localStorage.setItem("completedRegistration", "true");
+
             // Garbage collection
-            localStorage.removeItem("currentStep")
             localStorage.removeItem("petRegistrationData")
 
             history.push("/profile");

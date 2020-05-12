@@ -11,12 +11,18 @@ const Register = () => {
 
     const currentStep = Number(localStorage.getItem("currentStep"));
 
+    // Grab authenticated user's bearer token (JWT) and stash it in local storage
+    if (window.location.hash) {
+        const JWT = window.location.hash.substring(1);
+        localStorage.setItem("jwt", JWT);
+    }
+
     return (
         <Container className={baseclass}>
             <Chrome>
-                {currentStep === 1 && <RegisterStageOne />}
-                {currentStep === 2 && <RegisterStageTwo />}
-                {currentStep === 3 && <RegisterStageThree />}
+                {currentStep === 1 && <RegisterStageOne/>}
+                {currentStep === 2 && <RegisterStageTwo/>}
+                {currentStep === 3 && <RegisterStageThree/>}
             </Chrome>
         </Container>
     );

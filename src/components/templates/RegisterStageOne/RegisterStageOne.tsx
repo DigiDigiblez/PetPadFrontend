@@ -1,3 +1,5 @@
+import "./RegisterStageOne.scss";
+
 import React from "react";
 
 import Container from "../../atoms/Container";
@@ -47,7 +49,7 @@ const RegisterStageOne = () => {
                         <span className="emphasis">gender</span>?
                     </label>
                     <select name="gender" id="form-gender" required>
-                        <option disabled selected>
+                        <option value="" disabled selected>
                             My pet is a
                         </option>
                         <option value="Male">Male</option>
