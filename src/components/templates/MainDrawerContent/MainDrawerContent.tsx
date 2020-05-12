@@ -55,6 +55,11 @@ const MainDrawerContent = () => {
         history.push("/assistant");
     }
 
+    const handleLogout = () => {
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("userType");
+    }
+
     return (
         <Container className={baseclass}>
             <Container className={`${baseclass}__authed`}>
@@ -65,9 +70,12 @@ const MainDrawerContent = () => {
                         </NavLink>
                     </button>
                     <button className="link_cta">
-                        <NavLink to={ROUTES.HOMEPAGE}>
-                            Or sign out
-                        </NavLink>
+                        {/* Get user to sign out using Auth0 */}
+                        <a onClick={handleLogout} href="https://fsnd2020.auth0.com/logout?audience=petpad&response_type=token&client_id=Lhk2zF5M6CxLT4YoniUSIJMtelNQHmkR&redirect_uri=http://localhost:3000/register">
+                            <button className="primary_cta">
+                                Or sign out
+                            </button>
+                        </a>
                     </button>
                 </div>
                 <div className={`${baseclass}__drawers`}>
